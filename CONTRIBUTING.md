@@ -114,6 +114,7 @@ chef-codegen:
   * recipes/tests~instance.rb
   * resources/database.rb
   * resources/instance.rb
+  * resources/instance_config.rb
   * spec/bundle.rb
   * spec/cookbooks/google-gauth/metadata.rb
   * spec/data/network/gspanner_database/success1~name.yaml
@@ -128,10 +129,17 @@ chef-codegen:
   * spec/data/network/gspanner_instance/success2~title.yaml
   * spec/data/network/gspanner_instance/success3~name.yaml
   * spec/data/network/gspanner_instance/success3~title.yaml
+  * spec/data/network/gspanner_instance_config/success1~name.yaml
+  * spec/data/network/gspanner_instance_config/success1~title.yaml
+  * spec/data/network/gspanner_instance_config/success2~name.yaml
+  * spec/data/network/gspanner_instance_config/success2~title.yaml
+  * spec/data/network/gspanner_instance_config/success3~name.yaml
+  * spec/data/network/gspanner_instance_config/success3~title.yaml
   * spec/database_spec.rb
   * spec/fake_auth.rb
   * spec/fake_cred.rb
   * spec/foodcritic_spec.rb
+  * spec/instance_config_spec.rb
   * spec/instance_spec.rb
   * spec/network_blocker.rb
   * spec/network_blocker_spec.rb
