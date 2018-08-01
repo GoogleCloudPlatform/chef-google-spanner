@@ -30,64 +30,56 @@ $LOAD_PATH.unshift ::File.expand_path('../libraries', ::File.dirname(__FILE__))
 
 require 'chef/resource'
 require 'google/hash_utils'
-require 'google/spanner/network/delete'
 require 'google/spanner/network/get'
-require 'google/spanner/network/post'
-require 'google/spanner/network/put'
-require 'google/spanner/property/instanceconfig_name'
-require 'google/spanner/property/integer'
-require 'google/spanner/property/namevalues'
 require 'google/spanner/property/string'
 
 module Google
   module GSPANNER
     # A provider to manage Google Spanner resources.
-    class Instance < Chef::Resource
-      resource_name :gspanner_instance
+    class InstanceConfig < Chef::Resource
+      resource_name :gspanner_instance_config
 
-      property :i_label,
+      property :ic_label,
                String,
                coerce: ::Google::Spanner::Property::String.coerce,
                name_property: true, desired_state: true
-      property :config,
-               [String, ::Google::Spanner::Data::InstaConfiNameRef],
-               coerce: ::Google::Spanner::Property::InstaConfiNameRef.coerce, desired_state: true
       property :display_name,
                String, coerce: ::Google::Spanner::Property::String.coerce, desired_state: true
-      property :node_count,
-               Integer, coerce: ::Google::Spanner::Property::Integer.coerce, desired_state: true
-      property :labels,
-               [Hash, ::Google::Spanner::Property::NameValues],
-               coerce: ::Google::Spanner::Property::NameValues.coerce, desired_state: true
 
       property :credential, String, desired_state: false, required: true
       property :project, String, desired_state: false, required: true
 
+      # TODO(alexstephen): Check w/ Chef how to not expose this property yet
+      # allow the resource to store the @fetched API results for exports usage.
+      property :__fetched, Hash, desired_state: false, required: false
+
       action :create do
+        Chef.deprecated(:generic,
+                        ["gspanner_instance_config has been deprecated.",
+                         "Please use the InstanceConfig Name instead."
+                        ].join(" "))
+
         fetch = fetch_resource(@new_resource, self_link(@new_resource))
         if fetch.nil?
-          converge_by "Creating gspanner_instance[#{new_resource.name}]" do
+          converge_by "Creating gspanner_instance_config[#{new_resource.name}]" do
             # TODO(nelsonjr): Show a list of variables to create
             # TODO(nelsonjr): Determine how to print green like update converge
             puts # making a newline until we find a better way TODO: find!
             compute_changes.each { |log| puts "    - #{log.strip}\n" }
             create_req = ::Google::Spanner::Network::Post.new(
               collection(@new_resource), fetch_auth(@new_resource),
-              'application/json', resource_to_create
+              'application/json', resource_to_request
             )
-            return_if_object create_req.send
+            @new_resource.__fetched =
+              return_if_object create_req.send
           end
         else
           @current_resource = @new_resource.clone
-          @current_resource.i_label = ::Google::Spanner::Property::String.api_parse(fetch['name'])
-          @current_resource.config =
-            ::Google::Spanner::Property::InstaConfiNameRef.api_parse(fetch['config'])
+          @current_resource.ic_label =
+            ::Google::Spanner::Property::String.api_parse(fetch['name'])
           @current_resource.display_name =
             ::Google::Spanner::Property::String.api_parse(fetch['displayName'])
-          @current_resource.node_count =
-            ::Google::Spanner::Property::Integer.api_parse(fetch['nodeCount'])
-          @current_resource.labels =
-            ::Google::Spanner::Property::NameValues.api_parse(fetch['labels'])
+          @new_resource.__fetched = fetch
 
           update
         end
@@ -96,7 +88,7 @@ module Google
       action :delete do
         fetch = fetch_resource(@new_resource, self_link(@new_resource))
         unless fetch.nil?
-          converge_by "Deleting gspanner_instance[#{new_resource.name}]" do
+          converge_by "Deleting gspanner_instance_config[#{new_resource.name}]" do
             delete_req = ::Google::Spanner::Network::Delete.new(
               self_link(@new_resource), fetch_auth(@new_resource)
             )
@@ -109,7 +101,7 @@ module Google
 
       def exports
         {
-          name: i_label
+          name: __fetched['name']
         }
       end
 
@@ -118,12 +110,10 @@ module Google
       action_class do
         def resource_to_request
           request = {
-            name: new_resource.i_label,
-            config: new_resource.config,
-            displayName: new_resource.display_name,
-            nodeCount: new_resource.node_count,
-            labels: new_resource.labels
+            name: new_resource.ic_label
           }.reject { |_, v| v.nil? }
+          # Format request to conform with API endpoint
+          request = encode_request(request)
           request.to_json
         end
 
@@ -134,27 +124,19 @@ module Google
             puts # making a newline until we find a better way TODO: find!
             compute_changes.each { |log| puts "    - #{log.strip}\n" }
             update_req =
-              ::Google::Spanner::Network::Patch.new(self_link(@new_resource),
-                                                    fetch_auth(@new_resource),
-                                                    'application/json',
-                                                    resource_to_update)
+              ::Google::Spanner::Network::Put.new(self_link(@new_resource),
+                                                  fetch_auth(@new_resource),
+                                                  'application/json',
+                                                  resource_to_request)
             return_if_object update_req.send, ''
           end
-        end
-
-        def self.fetch_export(resource, type, id, property)
-          return if id.nil?
-          resource.resources("#{type}[#{id}]").exports[property]
         end
 
         def self.resource_to_hash(resource)
           {
             project: resource.project,
-            name: resource.i_label,
-            config: resource.config,
-            display_name: resource.display_name,
-            node_count: resource.node_count,
-            labels: resource.labels
+            name: resource.ic_label,
+            display_name: resource.display_name
           }.reject { |_, v| v.nil? }
         end
 
@@ -234,7 +216,7 @@ module Google
           URI.join(
             'https://spanner.googleapis.com/v1/',
             expand_variables(
-              'projects/{{project}}/instances',
+              'projects/{{project}}/instanceConfigs',
               data
             ).split('/').map { |p| p.gsub('%3A', ':') }
                         .join('/')
@@ -249,7 +231,7 @@ module Google
           URI.join(
             'https://spanner.googleapis.com/v1/',
             expand_variables(
-              'projects/{{project}}/instances/{{name}}',
+              'projects/{{project}}/instanceConfigs/{{name}}',
               data
             ).split('/').map { |p| p.gsub('%3A', ':') }
                         .join('/')
@@ -297,43 +279,20 @@ module Google
           template
         end
 
-        def decode_response(response)
-          self.class.decode_response(response)
+        def encode_request(request)
+          request['name'] =
+            "projects/#{resource[:project]}/instanceConfigs/#{resource[:name]}"
+          request.to_json
         end
 
         def self.decode_response(response)
           response = JSON.parse(response.body)
-          return response if response.empty?
-          # Don't alter if it's a async operation
-          return response if response['name'].include? '/operations/'
-
           response['name'] = response['name'].split('/').last
-          response['config'] = response['config'].split('/').last
           response
         end
 
-        def resource_to_create
-          instance = JSON.parse(resource_to_request)
-          instance['name'] =
-            "projects/#{@new_resource.project}/instances/#{@new_resource.i_label}"
-          instance['config'] =
-            "projects/#{@new_resource.project}/instanceConfigs/#{@new_resource.config}"
-          {
-            'instanceId' => @new_resource.i_label,
-            'instance' => instance
-          }.to_json
-        end
-
-        def resource_to_update
-          instance = JSON.parse(resource_to_request)
-          instance['name'] =
-            "projects/#{@new_resource.project}/instances/#{@new_resource.i_label}"
-          instance['config'] =
-            "projects/#{@new_resource.project}/instanceConfigs/#{@new_resource.config}"
-          {
-            'instance' => instance,
-            'fieldMask' => %w[name config displayName nodeCount labels].join(',')
-          }.to_json
+        def decode_response(response)
+          self.class.decode_response(response)
         end
 
         def self.fetch_resource(resource, self_link)
