@@ -27,6 +27,24 @@
 
 module GoogleTests
   module Constants
+    # Constants for: InstanceConfig.project
+    IC_PROJECT_DATA = [
+      'test project#0 data',
+      'test project#1 data',
+      'test project#2 data',
+      'test project#3 data',
+      'test project#4 data'
+    ].freeze
+
+    # Constants for: InstanceConfig.name
+    IC_NAME_DATA = [
+      'test name#0 data',
+      'test name#1 data',
+      'test name#2 data',
+      'test name#3 data',
+      'test name#4 data'
+    ].freeze
+
     # Constants for: Instance.project
     I_PROJECT_DATA = [
       'test project#0 data',

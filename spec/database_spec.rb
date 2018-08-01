@@ -411,7 +411,6 @@ context 'gspanner_database' do
             expect_network_create \
               1,
               {
-                'name' => 'title0',
                 'extraStatements' => %w[ww xx],
                 'create_statement' => 'CREATE DATABASE `title0`'
               },
@@ -509,7 +508,6 @@ context 'gspanner_database' do
             expect_network_create \
               1,
               {
-                'name' => 'test name#0 data',
                 'extraStatements' => %w[ww xx],
                 'create_statement' => 'CREATE DATABASE `test name#0 data`'
               },
