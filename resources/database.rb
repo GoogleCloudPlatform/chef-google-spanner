@@ -52,8 +52,8 @@ module Google
       property :extra_statements,
                Array, coerce: ::Google::Spanner::Property::StringArray.coerce, desired_state: true
       property :instance,
-               [String, ::Google::Spanner::Data::InstancNameRef],
-               coerce: ::Google::Spanner::Property::InstancNameRef.coerce, desired_state: true
+               [String, ::Google::Spanner::Data::InstanceNameRef],
+               coerce: ::Google::Spanner::Property::InstanceNameRef.coerce, desired_state: true
 
       property :credential, String, desired_state: false, required: true
       property :project, String, desired_state: false, required: true

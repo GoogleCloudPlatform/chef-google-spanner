@@ -50,8 +50,9 @@ module Google
                coerce: ::Google::Spanner::Property::String.coerce,
                name_property: true, desired_state: true
       property :config,
-               [String, ::Google::Spanner::Data::InstaConfiNameRef],
-               coerce: ::Google::Spanner::Property::InstaConfiNameRef.coerce, desired_state: true
+               [String, ::Google::Spanner::Data::InstanceConfigNameRef],
+               coerce: ::Google::Spanner::Property::InstanceConfigNameRef.coerce,
+               desired_state: true
       property :display_name,
                String, coerce: ::Google::Spanner::Property::String.coerce, desired_state: true
       property :node_count,
@@ -81,7 +82,7 @@ module Google
           @current_resource = @new_resource.clone
           @current_resource.i_label = ::Google::Spanner::Property::String.api_parse(fetch['name'])
           @current_resource.config =
-            ::Google::Spanner::Property::InstaConfiNameRef.api_parse(fetch['config'])
+            ::Google::Spanner::Property::InstanceConfigNameRef.api_parse(fetch['config'])
           @current_resource.display_name =
             ::Google::Spanner::Property::String.api_parse(fetch['displayName'])
           @current_resource.node_count =
