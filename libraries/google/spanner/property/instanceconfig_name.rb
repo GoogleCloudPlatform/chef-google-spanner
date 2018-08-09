@@ -30,11 +30,11 @@ module Google
     module Data
       # Base class for ResourceRefs
       # Imports name from instance_config
-      class InstaConfiNameRef
+      class InstanceConfigNameRef
         include Comparable
 
         def ==(other)
-          return false unless other.is_a? InstaConfiNameRef
+          return false unless other.is_a? InstanceConfigNameRef
           return false if resource != other.resource
           true
         end
@@ -52,7 +52,7 @@ module Google
 
       # A class to fetch the resource value from a referenced block
       # Will return the value exported from a different Chef resource
-      class InstaConfiNameRefCatalog < InstaConfiNameRef
+      class InstanceConfigNameRefCatalog < InstanceConfigNameRef
         def initialize(title)
           @title = title
         end
@@ -81,7 +81,7 @@ module Google
 
       # A class to manage a JSON blob from GCP API
       # Will immediately return value from JSON blob without changes
-      class InstaConfiNameRefApi < InstaConfiNameRef
+      class InstanceConfigNameRefApi < InstanceConfigNameRef
         attr_reader :resource
 
         def initialize(resource)
@@ -100,9 +100,9 @@ module Google
 
     module Property
       # A class to manage fetching name from a instance_config
-      class InstaConfiNameRef
+      class InstanceConfigNameRef
         def self.coerce
-          ->(x) { ::Google::Spanner::Property::InstaConfiNameRef.catalog_parse(x) }
+          ->(x) { ::Google::Spanner::Property::InstanceConfigNameRef.catalog_parse(x) }
         end
 
         def catalog_parse(value)
@@ -112,15 +112,15 @@ module Google
 
         def self.catalog_parse(value)
           return if value.nil?
-          return value if value.is_a? Data::InstaConfiNameRef
-          Data::InstaConfiNameRefCatalog.new(value)
+          return value if value.is_a? Data::InstanceConfigNameRef
+          Data::InstanceConfigNameRefCatalog.new(value)
         end
 
         # Used for fetched JSON values
         def self.api_parse(value)
           return if value.nil?
-          return value if value.is_a? Data::InstaConfiNameRef
-          Data::InstaConfiNameRefApi.new(value)
+          return value if value.is_a? Data::InstanceConfigNameRef
+          Data::InstanceConfigNameRefApi.new(value)
         end
       end
     end
