@@ -35,7 +35,7 @@ long_description '
     This cookbook provides the built-in types and services for Chef to manage
     Google Cloud Spanner resources, as native Chef types.'
 version '0.1.0'
-depends 'google-gauth', '< 0.2.0'
+depends 'google-gauth', '< 0.3.0'
 issues_url 'https://github.com/GoogleCloudPlatform/chef-google-spanner/issues' \
   if respond_to?(:issues_url)
 source_url 'https://github.com/GoogleCloudPlatform/chef-google-spanner' \
