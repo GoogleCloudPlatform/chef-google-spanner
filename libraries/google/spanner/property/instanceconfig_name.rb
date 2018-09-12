@@ -25,6 +25,7 @@
 #
 # ----------------------------------------------------------------------------
 
+
 module Google
   module Spanner
     module Data
@@ -53,8 +54,9 @@ module Google
       # A class to fetch the resource value from a referenced block
       # Will return the value exported from a different Chef resource
       class InstanceConfigNameRefCatalog < InstanceConfigNameRef
-        def initialize(title)
+        def initialize(title, parent_resource)
           @title = title
+          @parent_resource = parent_resource
         end
 
         # Chef requires the title for autorequiring
@@ -75,6 +77,7 @@ module Google
           Chef.run_context.resource_collection.each do |entry|
             return entry.exports[:name] if entry.name == @title
           end
+
           @title
         end
       end
@@ -102,18 +105,18 @@ module Google
       # A class to manage fetching name from a instance_config
       class InstanceConfigNameRef
         def self.coerce
-          ->(x) { ::Google::Spanner::Property::InstanceConfigNameRef.catalog_parse(x) }
+          ->(parent_resource, value) { ::Google::Spanner::Property::InstanceConfigNameRef.catalog_parse(value, parent_resource) }
         end
 
-        def catalog_parse(value)
+        def catalog_parse(value, parent_resource = nil)
           return if value.nil?
-          self.class.catalog_parse(value)
+          self.class.catalog_parse(value, parent_resource)
         end
 
-        def self.catalog_parse(value)
+        def self.catalog_parse(value, parent_resource = nil)
           return if value.nil?
           return value if value.is_a? Data::InstanceConfigNameRef
-          Data::InstanceConfigNameRefCatalog.new(value)
+          Data::InstanceConfigNameRefCatalog.new(value, parent_resource)
         end
 
         # Used for fetched JSON values
