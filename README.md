@@ -74,61 +74,12 @@ For complete details of the authentication cookbook, visit the
 
 ## Resources
 
-* [`gspanner_instance_config`](#gspanner_instance_config) -
-    A possible configuration for a Cloud Spanner instance. Configurations
-    define the geographic placement of nodes and their replication.
 * [`gspanner_instance`](#gspanner_instance) -
     An isolated set of Cloud Spanner resources on which databases can be
     hosted.
 * [`gspanner_database`](#gspanner_database) -
     A Cloud Spanner Database which is hosted on a Spanner instance.
 
-
-### gspanner_instance_config
-A possible configuration for a Cloud Spanner instance. Configurations
-define the geographic placement of nodes and their replication.
-
-
-#### Example
-
-```ruby
-
-```
-
-#### Reference
-
-```ruby
-gspanner_instance_config 'id-for-resource' do
-  display_name string
-  name         string
-  project      string
-  credential   reference to gauth_credential
-end
-```
-
-#### Actions
-
-* `create` -
-  Converges the `gspanner_instance_config` resource into the final
-  state described within the block. If the resource does not exist, Chef will
-  attempt to create it.
-* `delete` -
-  Ensures the `gspanner_instance_config` resource is not present.
-  If the resource already exists Chef will attempt to delete it.
-
-#### Properties
-
-* `name` -
-  A unique identifier for the instance configuration. Values are of the
-  form projects/<project>/instanceConfigs/[a-z][-a-z0-9]*
-
-* `display_name` -
-  Output only. The name of this instance configuration as it appears in UIs.
-
-#### Label
-Set the `ic_label` property when attempting to set primary key
-of this object. The primary key will always be referred to by the initials of
-the resource followed by "_label"
 
 ### gspanner_instance
 An isolated set of Cloud Spanner resources on which databases can be
