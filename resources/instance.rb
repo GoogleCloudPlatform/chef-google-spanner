@@ -36,7 +36,7 @@ require 'google/spanner/network/post'
 require 'google/spanner/network/put'
 require 'google/spanner/property/instanceconfig_name'
 require 'google/spanner/property/integer'
-require 'google/spanner/property/namevalues'
+require 'google/spanner/property/keyvaluepairs'
 require 'google/spanner/property/string'
 
 module Google
@@ -58,8 +58,8 @@ module Google
       property :node_count,
                Integer, coerce: ::Google::Spanner::Property::Integer.coerce, desired_state: true
       property :labels,
-               [Hash, ::Google::Spanner::Property::NameValues],
-               coerce: ::Google::Spanner::Property::NameValues.coerce, desired_state: true
+               [Hash, ::Google::Spanner::Property::KeyValuePairs],
+               coerce: ::Google::Spanner::Property::KeyValuePairs.coerce, desired_state: true
 
       property :credential, String, desired_state: false, required: true
       property :project, String, desired_state: false, required: true
@@ -88,7 +88,7 @@ module Google
           @current_resource.node_count =
             ::Google::Spanner::Property::Integer.api_parse(fetch['nodeCount'])
           @current_resource.labels =
-            ::Google::Spanner::Property::NameValues.api_parse(fetch['labels'])
+            ::Google::Spanner::Property::KeyValuePairs.api_parse(fetch['labels'])
 
           update
         end

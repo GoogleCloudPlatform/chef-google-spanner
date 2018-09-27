@@ -109,7 +109,7 @@ end
 gspanner_instance 'id-for-resource' do
   config       reference to gspanner_instance_config
   display_name string
-  labels       namevalues
+  labels       keyvaluepairs
   name         string
   node_count   integer
   project      string

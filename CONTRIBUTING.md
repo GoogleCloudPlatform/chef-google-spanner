@@ -100,7 +100,7 @@ chef-codegen:
   * libraries/google/spanner/property/instance_name.rb
   * libraries/google/spanner/property/instanceconfig_name.rb
   * libraries/google/spanner/property/integer.rb
-  * libraries/google/spanner/property/namevalues.rb
+  * libraries/google/spanner/property/keyvaluepairs.rb
   * libraries/google/spanner/property/string.rb
   * libraries/google/spanner/property/string_array.rb
   * metadata.rb

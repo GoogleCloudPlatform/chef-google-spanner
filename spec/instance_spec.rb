@@ -184,7 +184,7 @@ context 'gspanner_instance' do
 
               it { is_expected.to have_attributes(node_count: 2_502_187_088) }
 
-              # TODO(nelsonjr): Implement complex namevalues property test.
+              # TODO(alexstephen): Implement keyvaluepairs test.
               # it 'labels' do
               #   # Add test code here
               # end
@@ -206,7 +206,7 @@ context 'gspanner_instance' do
 
               it { is_expected.to have_attributes(node_count: 5_004_374_177) }
 
-              # TODO(nelsonjr): Implement complex namevalues property test.
+              # TODO(alexstephen): Implement keyvaluepairs test.
               # it 'labels' do
               #   # Add test code here
               # end
@@ -228,7 +228,7 @@ context 'gspanner_instance' do
 
               it { is_expected.to have_attributes(node_count: 7_506_561_265) }
 
-              # TODO(nelsonjr): Implement complex namevalues property test.
+              # TODO(alexstephen): Implement keyvaluepairs test.
               # it 'labels' do
               #   # Add test code here
               # end
@@ -377,7 +377,7 @@ context 'gspanner_instance' do
 
               it { is_expected.to have_attributes(node_count: 2_502_187_088) }
 
-              # TODO(nelsonjr): Implement complex namevalues property test.
+              # TODO(alexstephen): Implement keyvaluepairs test.
               # it 'labels' do
               #   # Add test code here
               # end
@@ -399,7 +399,7 @@ context 'gspanner_instance' do
 
               it { is_expected.to have_attributes(node_count: 5_004_374_177) }
 
-              # TODO(nelsonjr): Implement complex namevalues property test.
+              # TODO(alexstephen): Implement keyvaluepairs test.
               # it 'labels' do
               #   # Add test code here
               # end
@@ -421,7 +421,7 @@ context 'gspanner_instance' do
 
               it { is_expected.to have_attributes(node_count: 7_506_561_265) }
 
-              # TODO(nelsonjr): Implement complex namevalues property test.
+              # TODO(alexstephen): Implement keyvaluepairs test.
               # it 'labels' do
               #   # Add test code here
               # end
@@ -575,7 +575,7 @@ context 'gspanner_instance' do
 
           it { is_expected.to have_attributes(node_count: 2_502_187_088) }
 
-          # TODO(nelsonjr): Implement complex namevalues property test.
+          # TODO(alexstephen): Implement keyvaluepairs test.
           # it 'labels' do
           #   # Add test code here
           # end
@@ -693,7 +693,7 @@ context 'gspanner_instance' do
 
           it { is_expected.to have_attributes(node_count: 2_502_187_088) }
 
-          # TODO(nelsonjr): Implement complex namevalues property test.
+          # TODO(alexstephen): Implement keyvaluepairs test.
           # it 'labels' do
           #   # Add test code here
           # end
